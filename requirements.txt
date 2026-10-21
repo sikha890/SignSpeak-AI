@@ -1,5 +1,6 @@
-opencv-python
-mediapipe
-tensorflow
-numpy
+opencv-contrib-python==4.11.0.86
+mediapipe==0.10.21
+tensorflow==2.18.1
+numpy==1.26.4
+protobuf==4.25.9
 scikit-learn

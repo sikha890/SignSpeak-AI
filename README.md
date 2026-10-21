@@ -12,8 +12,5 @@ Build a real-time hand gesture recognition prototype using Python, OpenCV, Media
 - Gesture classification
 - Real-time prediction display
 
-### Project Status
-Day 1: Initial project setup.
-
 ### License
 MIT License. See the LICENSE file.
