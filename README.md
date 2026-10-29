@@ -1,177 +1,288 @@
 # SignSpeak-AI 🤟
 
-### Real-Time Sign Language Gesture Recognition Using Python and Computer Vision
+### Real-Time Hand Gesture Recognition Using Computer Vision & Deep Learning
 
-SignSpeak-AI is a computer vision and machine learning project that recognizes selected static hand gestures in real time using a webcam. It uses MediaPipe to extract hand landmarks, OpenCV for video capture and display, and a Random Forest classifier to predict gestures.
+**SignSpeak-AI** is a computer vision and deep learning project that recognizes selected static hand gestures through a webcam and converts recognized handshape predictions into text.
 
-The current prototype recognizes three gesture classes: **A, B, and C**.
+The application uses **MediaPipe** to extract hand landmarks, **OpenCV** for real-time webcam processing, and a **1D Convolutional Neural Network (CNN)** built with TensorFlow/Keras to classify gestures.
 
-## 🎯 Project Objective
+> An educational prototype exploring accessible human-computer interaction through real-time hand gesture recognition.
 
-To build a real-time hand gesture recognition prototype that combines hand landmark detection, dataset collection, machine learning, and live prediction.
+---
 
-## ✨ Features
+## 🎬 Project Demo
 
-- **Real-time webcam capture** using OpenCV.
-- **Hand landmark detection** using MediaPipe.
-- **Landmark-based feature extraction** using 21 hand landmarks with x, y, and z coordinates (63 features per sample).
-- **Gesture data collection** for A, B, and C.
-- **Model training and evaluation** using a Random Forest classifier.
-- **Live gesture prediction** with confidence display.
-- **Prediction smoothing** to help stabilize displayed predictions.
+**Watch SignSpeak-AI in action:**
 
-## 🖥️ Live Demo
+[▶️ Watch the Demo Video](screenshots/Demo%20Video.mp4)
 
-The screenshot below shows the prototype predicting gesture C with 90.0% confidence.
+### Application Screenshots
 
-![SignSpeak-AI live gesture recognition](screenshots/live-gesture-recognition.png)
+**Live Gesture Recognition**
 
-## 🛠️ Technologies Used
+![Live Gesture Recognition](screenshots/live-gesture-recognition.png)
 
-- **Python** — application logic and model training.
-- **OpenCV** — webcam access and image display.
-- **MediaPipe** — hand detection and landmark extraction.
-- **scikit-learn** — Random Forest classification and evaluation.
-- **Joblib** — saving and loading the trained model.
-- **NumPy** — numerical data processing.
+**Hand Tracking and Landmark Detection**
+
+![Hand Tracking](screenshots/hand-tracking.png)
+
+---
+
+## ✨ Key Features
+
+- **Real-Time Webcam Processing:** Captures live video using OpenCV.
+- **Hand Landmark Detection:** Detects and tracks 21 hand landmarks using MediaPipe.
+- **Feature Extraction:** Converts landmark coordinates into 63 numerical features.
+- **Deep Learning Classification:** Uses a trained 1D CNN to classify supported static handshapes.
+- **Live Predictions:** Displays predicted gestures and confidence information.
+- **Top-Three Predictions:** Displays candidate classes to help inspect model output.
+- **Letter-to-Text Interaction:** Allows recognized letters to be combined into text.
+- **Text Editing:** Supports inserting spaces, deleting characters, and clearing text.
+- **Text-to-Speech:** Provides a keyboard shortcut to speak the current text.
+- **Model Evaluation:** Includes evaluation reports and confusion matrices.
+
+---
+
+## 🧠 How It Works
+
+The application follows this pipeline:
+
+```text
+        Webcam Input
+             |
+             v
+   Hand Detection and Tracking
+             |
+             v
+    MediaPipe Hand Landmarks
+             |
+             v
+  21 Landmarks (x, y, z)
+             |
+             v
+    63 Numerical Features
+             |
+             v
+       Normalization
+             |
+             v
+      Trained 1D CNN
+             |
+             v
+     Gesture Prediction
+             |
+             v
+      Letter-to-Text
+             |
+             v
+    Recognized Text / Speech
+```
+
+### Technical Workflow
+
+1. **Capture:** OpenCV captures frames from the webcam.
+2. **Detect:** MediaPipe detects the hand and extracts 21 landmarks.
+3. **Extract:** The landmark coordinates form a 63-feature input vector.
+4. **Normalize:** Features are normalized using the statistics saved for the trained model.
+5. **Predict:** The CNN predicts one of the supported gesture classes.
+6. **Display:** The predicted gesture and confidence information appear in the application.
+7. **Interact:** Keyboard controls allow users to build and edit text and use text-to-speech.
+
+---
+
+## 📊 Dataset and Model Performance
+
+The current CNN evaluation report contains the following results:
+
+| Metric | Result |
+|---|---:|
+| Total dataset samples | 3,191 |
+| Input features per sample | 63 |
+| Supported gesture classes | 10 |
+| Training samples | 2,235 |
+| Validation samples | 318 |
+| Test samples | 638 |
+| **CNN test accuracy** | **92.63%** |
+| Test loss | 0.254219 |
+
+### Supported Gesture Classes
+
+`A` · `B` · `C` · `D` · `E` · `F` · `G` · `H` · `I` · `K`
+
+The current model recognizes these selected static handshapes. It does not support all alphabet letters or complete sign-language translation.
+
+### Evaluation Methodology
+
+The dataset is split into training, validation, and test sets using stratification by class label. Normalization statistics are calculated from the training data.
+
+**Important limitation:** The split is not grouped by recording session. Samples from the same recording session may appear in multiple subsets, potentially overestimating performance on unseen recordings or users. Independent-session and unseen-user evaluation is needed to assess real-world generalization.
+
+The reported accuracy applies to the current evaluation dataset and should not be interpreted as a guarantee of real-world accuracy.
+
+---
+
+## 🛠 Technology Stack
+
+| Technology | Purpose |
+|---|---|
+| Python | Application logic and ML workflow |
+| OpenCV | Webcam capture and image display |
+| MediaPipe | Hand detection and landmark extraction |
+| NumPy | Numerical processing |
+| TensorFlow / Keras | CNN training and inference |
+| scikit-learn | Machine learning utilities and evaluation |
+| Joblib | Saving and loading the Random Forest model |
+
+---
 
 ## 📁 Project Structure
 
 ```text
 SignSpeak-AI/
 ├── data/
-│   ├── raw/
-│   │   └── landmarks.csv
-│   └── processed/
-├── docs/
+│   └── raw/
+│       └── landmarks.csv
 ├── models/
-│   └── gesture_model.joblib
+│   ├── gesture_model.joblib
+│   ├── gesture_cnn.keras
+│   ├── gesture_cnn_classes.json
+│   └── hand_landmarker.task
+├── reports/
+│   ├── cnn_confusion_matrix.csv
+│   ├── cnn_evaluation_report.json
+│   ├── confusion_matrix.csv
+│   └── evaluation_report.json
 ├── screenshots/
 │   ├── hand-tracking.png
-│   └── live-gesture-recognition.png
+│   ├── live-gesture-recognition.png
+│   └── Demo Video.mp4
 ├── src/
 │   ├── collect_data.py
-│   ├── hand_tracking.py
 │   ├── predict_live.py
-│   └── train_model.py
+│   ├── train_model.py
+│   └── train_cnn.py
 ├── .gitignore
 ├── LICENSE
 ├── README.md
 └── requirements.txt
 ```
 
+*This structure represents the intended project layout. Confirm that each listed file exists in your repository before publishing.*
+
+---
+
 ## ⚙️ Installation and Setup
 
-### 1. Clone the repository
+### Prerequisites
+
+- Python version compatible with the project's installed dependencies
+- Git
+- A working webcam
+- A compatible operating system and Python environment
+
+### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/sikha890/SignSpeak-AI.git
 cd SignSpeak-AI
 ```
 
-### 2. Create a virtual environment
+### 2. Create and Activate a Virtual Environment
 
-```bash
-python -m venv .venv
-```
-
-### 3. Activate the environment
-
-**Windows — Git Bash:**
-
-```bash
-source .venv/Scripts/activate
-```
-
-**Windows — PowerShell:**
+**Windows — PowerShell**
 
 ```powershell
+python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 ```
 
-### 4. Install dependencies
+**Windows — Git Bash**
+
+```bash
+python -m venv .venv
+source .venv/Scripts/activate
+```
+
+**macOS / Linux**
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+### 3. Install Dependencies
 
 ```bash
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-## ▶️ How to Run
+Ensure `requirements.txt` contains the dependencies needed by the current CNN application, including compatible versions of TensorFlow, MediaPipe, OpenCV, and NumPy.
 
-Run the commands from the project's root directory with the virtual environment activated.
+### 4. Run Live Gesture Recognition
 
-### 1. Hand tracking
-
-```bash
-python src/hand_tracking.py
-```
-
-This starts webcam-based hand tracking and displays detected hand landmarks.
-
-### 2. Collect gesture data
-
-```bash
-python src/collect_data.py
-```
-
-Follow the prompts and on-screen instructions to collect samples for the supported gesture classes. The collected landmark data is stored in `data/raw/landmarks.csv`.
-
-### 3. Train the model
-
-```bash
-python src/train_model.py
-```
-
-This trains the Random Forest classifier, evaluates it on a held-out test split, and saves the trained model to `models/gesture_model.joblib`.
-
-### 4. Run live gesture recognition
+From the project root, run:
 
 ```bash
 python src/predict_live.py
 ```
 
-The application opens the webcam, detects hand landmarks, and displays the predicted gesture and confidence.
+The application should load the trained model, initialize the webcam, detect hand landmarks, and display gesture predictions.
 
-**Tip:** Press `q` to quit the webcam window.
+**Troubleshooting:** If the application cannot find a model or landmark file, verify that the required files exist in `models/` and that the paths configured in the Python scripts match the repository structure.
 
-## 📊 Dataset and Model Evaluation
+---
 
-The current dataset and training run produced the following results:
+## ⌨️ Keyboard Controls
 
-| Metric | Result |
-|---|---:|
-| Collected samples | 1,112 |
-| Input features per sample | 63 |
-| Gesture classes | 3 (A, B, C) |
-| Training samples | 889 |
-| Test samples | 223 |
-| Baseline test accuracy | 99.55% |
+Use these controls while the application window is focused:
 
-The model uses 21 hand landmarks, each represented by x, y, and z coordinates. These values form the 63 input features used by the classifier.
+| Key | Action |
+|---|---|
+| `Space` | Insert a space into the text buffer |
+| `Backspace` | Delete the last character |
+| `C` | Clear the current text |
+| `T` | Speak the current text |
+| `Q` | Quit the application |
 
-**Evaluation note:** The reported accuracy comes from a random train/test split of the collected dataset. If samples from the same recording sessions appear in both sets, this can overestimate performance on unseen users or recording conditions. Further testing on independent recordings is needed to assess real-world generalization.
+---
 
-## 📌 Current Scope and Limitations
+## ⚠️ Scope and Limitations
 
-- The current prototype recognizes static gestures for A, B, and C only.
+- The current model supports 10 selected static handshape classes.
+- It does not recognize all 26 alphabet letters.
 - It is not a complete sign-language translation system.
-- Recognition can be affected by lighting, camera quality, hand orientation, and background conditions.
-- Additional gesture classes and independent evaluation data are needed to expand and validate the system.
+- Dynamic signs involving movement are not currently covered by the stated model scope.
+- Recognition can vary with lighting, camera quality, hand orientation, background conditions, and the person performing the gesture.
+- The reported test accuracy has not been validated using a recording-session-independent split.
+- Text output depends on the predictions and how consistently gestures are presented.
+
+---
 
 ## 🚀 Future Improvements
 
-- Add more static gesture classes.
-- Collect a larger and more diverse dataset.
-- Evaluate the model on independent recording sessions and unseen users.
-- Improve robustness under different lighting and hand positions.
-- Explore dynamic gesture recognition and sentence-level translation as future extensions.
+- Expand the number and diversity of supported gesture classes.
+- Collect more balanced training data across users and recording conditions.
+- Evaluate performance on independent recording sessions and unseen users.
+- Improve prediction stability and confidence calibration.
+- Develop dynamic gesture recognition for movement-based signs.
+- Explore sentence-level sign-language understanding and translation.
+- Improve interface accessibility and usability.
+
+---
 
 ## 📄 License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+
+---
 
 ## 👩‍💻 Author
 
 **Sikha Kumari**
 
-GitHub: [sikha890](https://github.com/sikha890)
+GitHub: [@sikha890](https://github.com/sikha890)
+
+---
+
+*SignSpeak-AI is an educational computer vision and deep learning prototype focused on static hand gesture recognition and letter-to-text interaction.*

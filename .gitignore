@@ -1,9 +1,21 @@
+
 __pycache__/
 *.py[cod]
+
+# Python virtual environments
 .venv/
+.venv-cnn/
 venv/
 env/
+
+# Secrets and local configuration
 .env
+.env.*
+
+# Editor and temporary files
 .ipynb_checkpoints/
 .vscode/
 *.log
+
+# Local backups
+backups/

@@ -1,0 +1,226 @@
+{
+  "model": "1D CNN",
+  "dataset_samples": 3191,
+  "feature_count": 63,
+  "classes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "K"
+  ],
+  "split": {
+    "train": 2235,
+    "validation": 318,
+    "test": 638
+  },
+  "test_loss": 0.254219,
+  "test_accuracy": 0.926332,
+  "per_class_metrics": {
+    "A": {
+      "support": 48,
+      "precision": 0.9024,
+      "recall": 0.7708,
+      "f1_score": 0.8315
+    },
+    "B": {
+      "support": 49,
+      "precision": 0.8846,
+      "recall": 0.9388,
+      "f1_score": 0.9109
+    },
+    "C": {
+      "support": 168,
+      "precision": 0.9375,
+      "recall": 0.9821,
+      "f1_score": 0.9593
+    },
+    "D": {
+      "support": 47,
+      "precision": 0.9302,
+      "recall": 0.8511,
+      "f1_score": 0.8889
+    },
+    "E": {
+      "support": 74,
+      "precision": 1.0,
+      "recall": 0.9324,
+      "f1_score": 0.965
+    },
+    "F": {
+      "support": 68,
+      "precision": 0.8592,
+      "recall": 0.8971,
+      "f1_score": 0.8777
+    },
+    "G": {
+      "support": 42,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0
+    },
+    "H": {
+      "support": 41,
+      "precision": 1.0,
+      "recall": 0.9756,
+      "f1_score": 0.9877
+    },
+    "I": {
+      "support": 48,
+      "precision": 0.9216,
+      "recall": 0.9792,
+      "f1_score": 0.9495
+    },
+    "K": {
+      "support": 53,
+      "precision": 0.8302,
+      "recall": 0.8302,
+      "f1_score": 0.8302
+    }
+  },
+  "confusion_matrix_labels": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "K"
+  ],
+  "confusion_matrix": [
+    [
+      37,
+      5,
+      0,
+      2,
+      0,
+      1,
+      0,
+      0,
+      0,
+      3
+    ],
+    [
+      0,
+      46,
+      2,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      2,
+      1,
+      165,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      40,
+      0,
+      4,
+      0,
+      0,
+      2,
+      1
+    ],
+    [
+      0,
+      0,
+      3,
+      0,
+      69,
+      0,
+      0,
+      0,
+      0,
+      2
+    ],
+    [
+      1,
+      0,
+      3,
+      1,
+      0,
+      61,
+      0,
+      0,
+      0,
+      2
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      42,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      40,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      47,
+      1
+    ],
+    [
+      1,
+      0,
+      2,
+      0,
+      0,
+      4,
+      0,
+      0,
+      2,
+      44
+    ]
+  ],
+  "notes": [
+    "Normalization statistics were calculated from training data only.",
+    "The split is stratified by label but not grouped by recording session.",
+    "Samples from the same recording session may occur in multiple splits.",
+    "Results may therefore overestimate performance on new recording sessions."
+  ]
+}

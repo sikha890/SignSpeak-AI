@@ -1,0 +1,100 @@
+{
+  "project": "SignSpeak-AI",
+  "model": "RandomForestClassifier",
+  "evaluation_method": "stratified random 80/20 train-test split",
+  "random_state": 42,
+  "dataset_samples": 3191,
+  "feature_count": 63,
+  "class_counts": {
+    "A": 241,
+    "B": 244,
+    "C": 838,
+    "D": 233,
+    "E": 371,
+    "F": 341,
+    "G": 212,
+    "H": 204,
+    "I": 240,
+    "K": 267
+  },
+  "training_samples": 2552,
+  "testing_samples": 639,
+  "accuracy": 0.9780907668231612,
+  "classification_report": {
+    "A": {
+      "precision": 0.9791666666666666,
+      "recall": 0.9791666666666666,
+      "f1-score": 0.9791666666666666,
+      "support": 48.0
+    },
+    "B": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 49.0
+    },
+    "C": {
+      "precision": 0.9880952380952381,
+      "recall": 0.9880952380952381,
+      "f1-score": 0.9880952380952381,
+      "support": 168.0
+    },
+    "D": {
+      "precision": 0.94,
+      "recall": 1.0,
+      "f1-score": 0.9690721649484536,
+      "support": 47.0
+    },
+    "E": {
+      "precision": 1.0,
+      "recall": 0.972972972972973,
+      "f1-score": 0.9863013698630136,
+      "support": 74.0
+    },
+    "F": {
+      "precision": 0.9538461538461539,
+      "recall": 0.9117647058823529,
+      "f1-score": 0.9323308270676691,
+      "support": 68.0
+    },
+    "G": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 42.0
+    },
+    "H": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 41.0
+    },
+    "I": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 48.0
+    },
+    "K": {
+      "precision": 0.9107142857142857,
+      "recall": 0.9444444444444444,
+      "f1-score": 0.9272727272727272,
+      "support": 54.0
+    },
+    "accuracy": 0.9780907668231612,
+    "macro avg": {
+      "precision": 0.9771822344322345,
+      "recall": 0.9796444028061675,
+      "f1-score": 0.9782238993913769,
+      "support": 639.0
+    },
+    "weighted avg": {
+      "precision": 0.978435226745086,
+      "recall": 0.9780907668231612,
+      "f1-score": 0.9780968961436137,
+      "support": 639.0
+    }
+  },
+  "evaluation_note": "Preliminary holdout result. Similar samples from the same recording session may appear in both splits, so this score may overestimate performance on new users or recording sessions.",
+  "generated_at_utc": "2026-10-27T17:46:29.919582+00:00"
+}

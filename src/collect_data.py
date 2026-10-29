@@ -2,19 +2,34 @@
 """Collect labeled hand-landmark samples for SignSpeak-AI."""
 
 import csv
+from collections import Counter
 from pathlib import Path
 
 import cv2
 import mediapipe as mp
+import pandas as pd
 
-# Run this script from the project root.
 DATA_FILE = Path("data/raw/landmarks.csv")
-LABELS = {"1": "A", "2": "B", "3": "C"}
+
+# A-I plus K: ten static gesture classes.
+LABELS = {
+    "1": "A",
+    "2": "B",
+    "3": "C",
+    "4": "D",
+    "5": "E",
+    "6": "F",
+    "7": "G",
+    "8": "H",
+    "9": "I",
+    "k": "K",
+}
+
+SAMPLES_EVERY_N_FRAMES = 5
 
 
 def main():
     DATA_FILE.parent.mkdir(parents=True, exist_ok=True)
-    file_exists = DATA_FILE.exists() and DATA_FILE.stat().st_size > 0
 
     header = ["label"] + [
         f"{axis}{i}"
@@ -22,17 +37,32 @@ def main():
         for axis in ("x", "y", "z")
     ]
 
-    mp_hands = mp.solutions.hands
-    mp_drawing = mp.solutions.drawing_utils
-    camera = cv2.VideoCapture(0)
+    file_exists = DATA_FILE.exists() and DATA_FILE.stat().st_size > 0
 
+    if file_exists:
+        existing_columns = list(pd.read_csv(DATA_FILE, nrows=0).columns)
+        if existing_columns != header:
+            print("Error: Existing CSV columns do not match the expected format.")
+            print("No data was collected.")
+            return
+
+        totals = Counter(
+            pd.read_csv(DATA_FILE, usecols=["label"])["label"].astype(str)
+        )
+    else:
+        totals = Counter()
+
+    session_counts = Counter()
+    selected_label = None
+    frame_count = 0
+
+    camera = cv2.VideoCapture(0)
     if not camera.isOpened():
         print("Error: Could not open webcam.")
         return
 
-    counts = {"A": 0, "B": 0, "C": 0}
-    selected_label = None
-    frame_count = 0
+    mp_hands = mp.solutions.hands
+    mp_drawing = mp.solutions.drawing_utils
 
     try:
         with open(DATA_FILE, "a", newline="", encoding="utf-8") as file:
@@ -66,8 +96,7 @@ def main():
                         if selected_label is not None:
                             frame_count += 1
 
-                            # Save one sample every five frames.
-                            if frame_count % 5 == 0:
+                            if frame_count % SAMPLES_EVERY_N_FRAMES == 0:
                                 features = []
                                 for point in hand.landmark:
                                     features.extend(
@@ -76,30 +105,33 @@ def main():
 
                                 writer.writerow([selected_label] + features)
                                 file.flush()
-                                counts[selected_label] += 1
+                                session_counts[selected_label] += 1
+                                totals[selected_label] += 1
 
-                    instructions = "1=A  2=B  3=C  0=Pause  Q=Quit"
+                    instructions = (
+                        "1-9=A-I  K=K  P=Pause  Q=Quit"
+                    )
                     cv2.putText(
                         frame, instructions, (10, 30),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.65,
-                        (0, 255, 0), 2
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.55,
+                        (0, 255, 0), 2,
                     )
 
                     status = f"Selected: {selected_label or 'Paused'}"
                     cv2.putText(
                         frame, status, (10, 65),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.65,
-                        (0, 255, 255), 2
+                        (0, 255, 255), 2,
                     )
 
                     count_text = (
-                        f"A: {counts['A']}  B: {counts['B']}  "
-                        f"C: {counts['C']}"
+                        f"Session: {sum(session_counts.values())}  "
+                        f"Total: {sum(totals.values())}"
                     )
                     cv2.putText(
                         frame, count_text, (10, 100),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.65,
-                        (255, 255, 0), 2
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.60,
+                        (255, 255, 0), 2,
                     )
 
                     cv2.imshow("SignSpeak-AI | Data Collection", frame)
@@ -107,18 +139,24 @@ def main():
 
                     if key == ord("q"):
                         break
-                    elif key in map(ord, LABELS):
+                    elif key == ord("p"):
+                        selected_label = None
+                        frame_count = 0
+                    elif chr(key) in LABELS:
                         selected_label = LABELS[chr(key)]
                         frame_count = 0
-                    elif key == ord("0"):
-                        selected_label = None
 
+    except KeyboardInterrupt:
+        print("\nCollection interrupted.")
     finally:
         camera.release()
         cv2.destroyAllWindows()
 
-    print(f"Dataset file: {DATA_FILE.resolve()}")
-    print(f"Samples collected this session: {counts}")
+    print(f"\nDataset: {DATA_FILE.resolve()}")
+    print(f"Samples collected this session: {dict(session_counts)}")
+    print("\nCurrent dataset totals:")
+    for label in sorted(totals):
+        print(f"  {label}: {totals[label]}")
 
 
 if __name__ == "__main__":
