@@ -1,4 +1,4 @@
-# SignSpeak-AI 🤟
+# SignSpeak-AI 
 
 ### Real-Time Hand Gesture Recognition Using Computer Vision & Deep Learning
 
